@@ -1,6 +1,7 @@
 {
 	"require": {
-		"php": ">= 7.1"
+		"php": ">= 7.1",
+		"nette/di": "^2.4"
 	},
 	"require-dev": {
 		"nette/tester": "2.0.x-dev",
@@ -9,7 +10,8 @@
 		"squizlabs/php_codesniffer": "^2.8",
 		"slevomat/coding-standard": "^2.0",
 		"consistence/coding-standard": "^0.13",
-		"phing/phing": "^2.16"
+		"phing/phing": "^2.16",
+		"nette/bootstrap": "^2.4"
 	},
 	"minimum-stability": "stable",
 	"autoload": {
