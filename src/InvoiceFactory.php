@@ -17,6 +17,9 @@ class InvoiceFactory
 	/** @var bool */
 	private $eetInvoice;
 
+	/** @var IParticipant|null */
+	private $supplier;
+
 	public function __construct(bool $simplifiedInvoice, bool $eetInvoice)
 	{
 		$this->simplifiedInvoice = $simplifiedInvoice;
@@ -33,6 +36,12 @@ class InvoiceFactory
 	 */
 	public function createInvoice(IData $data, array $items, ?IParticipant $consumer = null): Invoice
 	{
+		if ($this->getSupplier() === null) {
+			throw new MissingParticipantException('No supplier set');
+		}
+		if ($this->getSupplier()->isVatPayer() && !$data->containsVatData()) {
+			throw new IncompleteDataException('Supplier is VAT payer but supplied data does not contain VAT data');
+		}
 		if ($consumer === null && !$this->simplifiedInvoice) {
 			throw new MissingParticipantException('Consumer must be supplied when simplified invoice is not allowed');
 		}
@@ -60,6 +69,16 @@ class InvoiceFactory
 	public function setEetInvoice(bool $eetInvoice): void
 	{
 		$this->eetInvoice = $eetInvoice;
+	}
+
+	public function getSupplier(): ?IParticipant
+	{
+		return $this->supplier;
+	}
+
+	public function setSupplier(IParticipant $supplier): void
+	{
+		$this->supplier = $supplier;
 	}
 
 }
