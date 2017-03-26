@@ -24,3 +24,7 @@ install:
 
 script:
     - vendor/bin/phing
+
+after_success:
+    - vendor/bin/phing coverage
+    - travis_retry php vendor/bin/coveralls -v

@@ -11,7 +11,8 @@
 		"slevomat/coding-standard": "^2.0",
 		"consistence/coding-standard": "^0.13",
 		"phing/phing": "^2.16",
-		"nette/bootstrap": "^2.4"
+		"nette/bootstrap": "^2.4",
+		"satooshi/php-coveralls": "^1.0"
 	},
 	"minimum-stability": "stable",
 	"autoload": {

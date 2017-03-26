@@ -143,4 +143,18 @@
 		</exec>
 	</target>
 
+	<target name="coverage">
+		<exec
+				executable="vendor/bin/tester"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg line="-p phpdbg"/>
+			<arg line="--coverage tests/tmp/coverage.xml"/>
+			<arg line="--coverage-src src"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
 </project>
