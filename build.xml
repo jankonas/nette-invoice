@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="check">
+
+	<target name="check" depends="
+		composer,
+		lint,
+		stan,
+		cs,
+		tests
+	"/>
+
+	<target name="clear">
+		<delete
+				dir="tests/tmp"
+				includeemptydirs="true"
+				quiet="true"
+		/>
+	</target>
+
+	<target name="composer">
+		<exec
+			executable="composer"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="install"/>
+		</exec>
+	</target>
+
+	<target name="lint">
+		<exec
+				executable="vendor/bin/parallel-lint"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg line="-e php,phpt"/>
+			<arg path="src" />
+			<arg path="tests" />
+		</exec>
+	</target>
+
+	<target name="stan" depends="clear">
+		<exec
+				executable="vendor/bin/phpstan"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="analyse"/>
+			<arg line="-l 5"/>
+			<arg value="--no-progress"/>
+			<arg path="src"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
+	<target name="cs" depends="
+		cs-src,
+		cs-tests
+	"/>
+
+	<target name="cs-src">
+		<exec
+				executable="vendor/bin/phpcs"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="--standard=build/ruleset.xml"/>
+			<arg value="--extensions=php,phpt"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="-sp"/>
+			<arg path="src"/>
+		</exec>
+	</target>
+
+	<target name="cs-tests" depends="clear">
+		<exec
+				executable="vendor/bin/phpcs"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="--standard=build/ruleset-tests.xml"/>
+			<arg value="--extensions=php,phpt"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="-sp"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
+	<target name="cs-fix" depends="
+		cs-fix-src,
+		cs-fix-tests
+	"/>
+
+	<target name="cs-fix-src">
+		<exec
+				executable="vendor/bin/phpcbf"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="--standard=build/ruleset.xml"/>
+			<arg value="--extensions=php,phpt"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="-sp"/>
+			<arg path="src"/>
+		</exec>
+	</target>
+
+	<target name="cs-fix-tests" depends="clear">
+		<exec
+				executable="vendor/bin/phpcbf"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="--standard=build/ruleset-tests.xml"/>
+			<arg value="--extensions=php,phpt"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="-sp"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
+	<target name="tests">
+		<exec
+				executable="vendor/bin/tester"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg line="-p php"/>
+			<arg value="-s"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
+</project>

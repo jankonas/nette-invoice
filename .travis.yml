@@ -1,0 +1,26 @@
+language: php
+
+sudo: false
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+php:
+    - 7.1
+
+env:
+    matrix:
+        - NETTE="orig"
+        - NETTE="2.4.*"
+        - NETTE="3.0.x-dev as 2.4"
+
+before_install:
+    - travis_retry composer self-update
+    - php build/travis-composer.php
+
+install:
+    - travis_retry composer update --prefer-dist
+
+script:
+    - vendor/bin/phing
