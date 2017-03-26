@@ -1,0 +1,9 @@
+invoice:
+	supplier: @supplier
+
+services:
+	supplier:
+		class: JanKonas\NetteInvoice\Participant\Participant(Company Name, Street, '1', City)
+		setup:
+			- setCountry(Country)
+			- setVatPayer(true)

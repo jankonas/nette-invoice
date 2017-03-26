@@ -3,4 +3,12 @@
     <rule ref="./ruleset.xml">
         <exclude name="PSR1.Files.SideEffects.FoundWithSymbols" />
     </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+        <properties>
+            <property name="usefulAnnotations" type="array" value="
+				@throws,
+				@dataProvider,
+			" />
+        </properties>
+    </rule>
 </ruleset>

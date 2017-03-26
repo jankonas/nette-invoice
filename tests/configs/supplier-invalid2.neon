@@ -1,0 +1,7 @@
+invoice:
+	supplier:
+		name: Company Name
+		street: Street
+		streetNumber: 1
+		city: City
+		extraData: something

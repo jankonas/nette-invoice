@@ -1,0 +1,19 @@
+invoice:
+	supplier:
+		name: Company Name
+		street: Street
+		streetNumber: 1
+		city: City
+		zipCode: zip
+		country: country
+		in: 12345678
+		taxIn: CZ12345678
+		businessRegisterInfo: 'register A, file 123'
+		accountNumber: 12345678/5678
+		extraData:
+			something: aaa
+			else: bbb
+			subArray:
+				- 1
+				- 2
+		vatPayer: false

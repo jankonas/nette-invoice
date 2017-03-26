@@ -1,0 +1,2 @@
+invoice:
+	supplier: JanKonas\NetteInvoice\Participant\Participant(Company Name, Street, '1', City)
