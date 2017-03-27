@@ -4,6 +4,7 @@ namespace JanKonas\NetteInvoice;
 
 use JanKonas\NetteInvoice\Data\IData;
 use JanKonas\NetteInvoice\Data\IncompleteDataException;
+use JanKonas\NetteInvoice\Data\InvalidDataException;
 use JanKonas\NetteInvoice\Item\IItem;
 use JanKonas\NetteInvoice\Participant\IParticipant;
 use JanKonas\NetteInvoice\Participant\MissingParticipantException;
@@ -33,6 +34,7 @@ class InvoiceFactory
 	 * @return Invoice
 	 * @throws MissingParticipantException
 	 * @throws IncompleteDataException
+	 * @throws InvalidDataException
 	 */
 	public function createInvoice(IData $data, array $items, ?IParticipant $consumer = null): Invoice
 	{
@@ -45,8 +47,18 @@ class InvoiceFactory
 		if ($consumer === null && !$this->simplifiedInvoice) {
 			throw new MissingParticipantException('Consumer must be supplied when simplified invoice is not allowed');
 		}
-		if ($this->eetInvoice && !$data->containsEetData()) {
+		if ($this->simplifiedInvoice && $data->shouldVatBePayedByCustomer() === true) {
+			throw new InvalidDataException('Invoice cannot be simplified when tax should be payed by customer');
+		}
+		if ($data->getItemsCurrency() !== $data->getTaxCurrency() && $data->getExchangeRate() === null) {
+			throw new InvalidDataException('Items currency does not match tax currency but no exchange rate given');
+		}
+		if ($this->eetInvoice && $data->getEetData() === null) {
 			throw new IncompleteDataException('Supplied data does not contain EET data');
+		}
+		$eetData = $data->getEetData();
+		if ($eetData !== null && $eetData->getFik() === null && $eetData->getPkp() === null) {
+			throw new IncompleteDataException('EET data must contain one of FIK and PKP codes');
 		}
 		return new Invoice(); // TODO
 	}
